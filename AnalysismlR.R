@@ -54,11 +54,20 @@ rforest_wrap <- makeImputeWrapper(rforest_lrn,
                                  cols = list(Fare = imputeMean(),
                                              Embarked = imputeMode(),
                                              Age_cat = imputeMode()))
+# train single models
+logreg_mod <- train(logreg_wrap, classif_task)
+summary(getLearnerModel(logreg_mod, more.unwrap = TRUE))
+rforest_mod <- train(rforest_wrap, classif_task)
+getLearnerModel(rforest_mod, more.unwrap = TRUE)$importance
+getLearnerModel(rforest_mod, more.unwrap = TRUE)$confusion
+
 # resample description
 rdescr <- makeResampleDesc("CV", iters = 10)
 
-# resampled logreg
+# resampled models 
 logreg_res <- resample(logreg_wrap, classif_task, rdescr)
 rforest_res <- resample(rforest_wrap, classif_task, rdescr)
-# more clean combination
+
+# more clean solution
 bm <- benchmark(list(logreg_wrap, rforest_wrap), classif_task, rdescr)
+
