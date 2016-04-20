@@ -32,9 +32,8 @@ print(pairsPlot)
 dev.off()
 
 # descriptive tables
-freq <- function(x)sum(x == 1)/length(x)
 train %>% na.omit %>% group_by(Pclass, Age_cat, Sex) %>% 
-  summarise(n(), freq(Survived)) %>% as.data.frame
+  summarise(n(), mean(Survived == 1)) %>% as.data.frame
 
 ## predictive modelling in mlr:
 # make task
