@@ -36,13 +36,13 @@ train %>% na.omit %>% group_by(Pclass, Age_cat, Sex) %>%
 classif_task <- makeClassifTask(id = "Titanic", data = train, 
                                 target = "Survived", positive = "1")
 
-# make learner
+# make learners
 logreg_lrn <- makeLearner("classif.logreg", predict.type = "prob", 
                           fix.factors.prediction = TRUE)
 rforest_lrn <- makeLearner("classif.randomForest", predict.type = "prob",
                           fix.factors.prediction = TRUE)
 
-# create impute wrapper for logreg: impute numeric by mean/factor by mode
+# create impute wrappers: impute numeric by mean/factor by mode
 logreg_wrap <- makeImputeWrapper(logreg_lrn, 
                                  cols = list(Fare = imputeMean(),
                                                 Embarked = imputeMode(),
@@ -51,7 +51,7 @@ rforest_wrap <- makeImputeWrapper(rforest_lrn,
                                  cols = list(Fare = imputeMean(),
                                              Embarked = imputeMode(),
                                              Age_cat = imputeMode()))
-# train single models
+# train models
 logreg_mod <- train(logreg_wrap, classif_task)
 rforest_mod <- train(rforest_wrap, classif_task)
 
