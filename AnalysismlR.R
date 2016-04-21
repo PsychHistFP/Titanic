@@ -62,7 +62,9 @@ getLearnerModel(rforest_mod, more.unwrap = TRUE)$confusion
 rdescr <- makeResampleDesc("CV", iters = 10)
 
 # compare predictive performance 
-bm <- benchmark(list(logreg_wrap, rforest_wrap), classif_task, rdescr)
+bm <- benchmark(list(logreg_wrap, rforest_wrap), classif_task, rdescr, 
+                measures = list(mmce, acc))
+bm
 
 # make predictions
 logreg_pred <- predict(logreg_mod, newdata = test)
