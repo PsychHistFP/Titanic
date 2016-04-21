@@ -21,11 +21,11 @@ vnapply(test, function(x)sum(is.na(x)))
 # preprocess data
 train <- preprocmlR(train)
 
-# pairs plot
-pdf("pairsPlot.pdf", height = 20, width = 20)
-pairsPlot <- train %>% ggpairs
-print(pairsPlot)
-dev.off()
+# # pairs plot
+# pdf("pairsPlot.pdf", height = 20, width = 20)
+# pairsPlot <- train %>% ggpairs
+# print(pairsPlot)
+# dev.off()
 
 # descriptive tables
 train %>% na.omit %>% group_by(Pclass, Age_cat, Sex) %>% 
