@@ -26,6 +26,12 @@ train <- preprocmlR(train)
 # pairsPlot <- train %>% ggpairs
 # print(pairsPlot)
 # dev.off()
+# # pairs plot Sex, Age, Pclass
+# pdf("pairsPlotsmall.pdf", height = 20, width = 20)
+# pairsPlotsmall <- train %>% select(Sex, Age_cat, Pclass, Survived) %>%
+#   ggpairs(lower = "blank")
+# print(pairsPlotsmall)
+# dev.off()
 
 # descriptive tables
 train %>% na.omit %>% group_by(Pclass, Age_cat, Sex) %>% 
