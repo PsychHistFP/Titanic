@@ -41,6 +41,7 @@ logreg_lrn <- makeLearner("classif.logreg", predict.type = "prob",
                           fix.factors.prediction = TRUE)
 rforest_lrn <- makeLearner("classif.randomForest", predict.type = "prob",
                           fix.factors.prediction = TRUE)
+
 # create impute wrapper for logreg: impute numeric by mean/factor by mode
 logreg_wrap <- makeImputeWrapper(logreg_lrn, 
                                  cols = list(Fare = imputeMean(),
@@ -52,9 +53,9 @@ rforest_wrap <- makeImputeWrapper(rforest_lrn,
                                              Age_cat = imputeMode()))
 # train single models
 logreg_mod <- train(logreg_wrap, classif_task)
-summary(getLearnerModel(logreg_mod, more.unwrap = TRUE))
 rforest_mod <- train(rforest_wrap, classif_task)
 
+summary(getLearnerModel(logreg_mod, more.unwrap = TRUE))
 getLearnerModel(rforest_mod, more.unwrap = TRUE)$importance
 getLearnerModel(rforest_mod, more.unwrap = TRUE)$confusion
 
@@ -77,5 +78,6 @@ logreg_pred_kaggle <- test %>%
 rforest_pred_kaggle <- test %>% 
   mutate(Survived = as.data.frame(rforest_pred)$response) %>% 
   select(PassengerId, Survived)
+
 write.csv(logreg_pred_kaggle, "logreg_pred.csv", row.names = FALSE)
 write.csv(rforest_pred_kaggle, "rforest_pred.csv", row.names = FALSE)
