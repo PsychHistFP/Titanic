@@ -5,6 +5,9 @@ library(ggplot2)
 library(GGally)
 library(mlr)
 
+# source preprocessing function
+source("preprocmlR.R")
+
 # load dataset
 train <- read.csv(file.path("data", "train.csv"), 
                   stringsAsFactors = FALSE, na.strings = "")
@@ -14,9 +17,6 @@ test <- read.csv(file.path("data", "test.csv"),
 # check missing values
 vnapply(train, function(x)sum(is.na(x)))
 vnapply(test, function(x)sum(is.na(x)))
-
-# source preprocessing function
-source("preprocmlR.R")
 
 # preprocess data
 train <- preprocmlR(train)
