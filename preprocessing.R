@@ -13,7 +13,7 @@ getFamMembers = function(namelist) {
                        )
     count_family = table(famnames)
     familymembers = count_family[famnames]
-    return(familymembers)
+    return(familymembers)# return familymembers as numeric variable
 }
 
 # ## get title
@@ -29,21 +29,6 @@ getFamMembers = function(namelist) {
 # 
 # }
 
-# ## merge titles
-# mergeTitles = function(title){
-#   if (title %in% c("Capt.", "Col.", "Major.")) {
-#     title = "Military"
-#   } else if (title %in% c("Don.", "Jonkheer.", "Lady.", "Sir.")) {
-#     title = "Honor"
-#   } else if (title %in% c("Mme.", "Mrs.", "Mme.")) {
-#     title = "Mrs"
-#   } else if (title %in% c("Mlle.", "Miss.", "Ms.")) {
-#     title = "Miss"
-#   } else if (!(title %in% c("Dr.", "Master.", "Mr.", "Rev."))) {
-#     title = "something else"
-#   }
-#   return(title)
-# }
 
 mergeTitles = function(title){
   if (title %in% c("Capt.", "Col.", "Major.", "Dr.", "Rev.")) {
@@ -136,7 +121,7 @@ addFeatures = function(data) {
 #     return(X)
 # }
 
-## convert variables to factors and drop others (no imputation)
+## convert variables to factors and drop others (hier wurde rumgepfuscht)
 cleanData = function(data, test = FALSE) {
   if (test) {
     weg = grep('Name|Ticket|Cabin',names(data))
