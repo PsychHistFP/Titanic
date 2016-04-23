@@ -3,5 +3,4 @@
 .RData
 .Ruserdata
 *.pdf
-logreg_pred.csv
-rforest_pred.csv
+*.csv

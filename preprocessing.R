@@ -13,27 +13,82 @@ getFamMembers = function(namelist) {
                        )
     count_family = table(famnames)
     familymembers = count_family[famnames]
-    return(factor(familymembers))
+    return(familymembers)
 }
 
-## get title
+# ## get title
+# getTitles = function(namelist) {
+#     tmp = vcapply(namelist,
+#                  function(string) string[2]
+#                  )
+# 
+#     titles = vcapply(str_split(tmp, ' '),
+#                      function(string) string[1]
+#                      )
+#     return(factor(titles))
+# 
+# }
+
+# ## merge titles
+# mergeTitles = function(title){
+#   if (title %in% c("Capt.", "Col.", "Major.")) {
+#     title = "Military"
+#   } else if (title %in% c("Don.", "Jonkheer.", "Lady.", "Sir.")) {
+#     title = "Honor"
+#   } else if (title %in% c("Mme.", "Mrs.", "Mme.")) {
+#     title = "Mrs"
+#   } else if (title %in% c("Mlle.", "Miss.", "Ms.")) {
+#     title = "Miss"
+#   } else if (!(title %in% c("Dr.", "Master.", "Mr.", "Rev."))) {
+#     title = "something else"
+#   }
+#   return(title)
+# }
+
+mergeTitles = function(title){
+  if (title %in% c("Capt.", "Col.", "Major.", "Dr.", "Rev.")) {
+    title = "Profession"
+  } else if (title %in% c("Don.", "Jonkheer.", "Lady.", "Sir.")) {
+    title = "Honor"
+  } else if (title %in% c("Mme.", "Mrs.", "Mme.", "Mr.")) {
+    title = "Married"
+  } else if (title %in% c("Mlle.", "Miss.", "Ms.", "Master.")) {
+    title = "Unmarried"
+  } else {
+    title = "something else"
+  }
+  return(title)
+}
+
+
+## get handcrafted title 
 getTitles = function(namelist) {
-    tmp = vcapply(namelist,
-                 function(string) string[2]
-                 )
-
-    titles = vcapply(str_split(tmp, ' '),
-                     function(string) string[1]
-                     )
-    return(factor(titles))
-
+  tmp = vcapply(namelist,
+                function(string) string[2]
+  )
+  
+  titles = vcapply(str_split(tmp, ' '),
+                   function(string) string[1]
+  )
+  titles = vcapply(titles, mergeTitles)
+  return(factor(titles))
+  
 }
+
+
+
+# ## get cabin number
+# getCabin = function(data) {
+#     cabin = str_sub(data$Cabin, 1, 1)
+#     cabin[cabin == ""] = 'unknown'
+#     return(factor(cabin))
+# }
 
 ## get cabin number
 getCabin = function(data) {
-    cabin = str_sub(data$Cabin, 1, 1)
-    cabin[cabin == ''] = 'unknown'
-    return(factor(cabin))
+  cabin = str_sub(data$Cabin, 1, 1)
+  cabin[is.na(cabin)] = 'unknown'
+  return(factor(cabin))
 }
 
 ## special ticket yes/no
@@ -71,13 +126,25 @@ addFeatures = function(data) {
 }
 
 
-## convert variables to factors and drop others
-cleanData = function(data) {
-    weg = grep('Pass|Name|Ticket|Cabin',names(data))
-    X = data[-weg]
-    factors = grep('Surv|Pclass|Sex|Sib|Parch|Embar', names(X))
-    X[factors] = lapply(X[factors], factor)
-    X[] = lapply(X, imputeVar)
-    return(X)
-}
+# ## convert variables to factors and drop others
+# cleanData = function(data) {
+#     weg = grep('Pass|Name|Ticket|Cabin',names(data))
+#     X = data[-weg]
+#     factors = grep('Surv|Pclass|Sex|Sib|Parch|Embar', names(X))
+#     X[factors] = lapply(X[factors], factor)
+#     X[] = lapply(X, imputeVar)
+#     return(X)
+# }
 
+## convert variables to factors and drop others (no imputation)
+cleanData = function(data, test = FALSE) {
+  if (test) {
+    weg = grep('Name|Ticket|Cabin',names(data))
+  } else {
+    weg = grep('Pass|Name|Ticket|Cabin',names(data))
+  }
+  X = data[-weg]
+  factors = grep('Surv|Pclass|Sex|Embar', names(X))
+  X[factors] = lapply(X[factors], factor)
+  return(X)
+}
